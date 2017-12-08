@@ -7,18 +7,7 @@ const morgan = require('morgan');
 const app = express();
 const PORT = 3000 || process.env.PORT;
 
-var kittySchema = mongoose.Schema({
-    name: String
-});
-// Sera 
-kittySchema.methods.speak = function () {
-    var greeting = this.name
-      ? "Meow name is " + this.name
-      : "I don't have a name";
-    console.log(greeting);
-  }
-  
-var Kitten = mongoose.model('Kitten', kittySchema);
+const Kitten = require('./models/kitty');
 
 app.use(bodyParser.urlencoded( { extended: false } ));
 app.use(morgan('dev'));
@@ -37,6 +26,22 @@ var router = express.Router();
 router.get('/',(req,res)=>{
     res.status(200);
     res.json({message:'Hola'});
+});
+
+router.post('/api/kitten',(req,res)=>{
+    console.log(req.body);
+    let gatito = new Kitten();
+    gatito.name = req.body.name;
+    gatito.dueño = req.body.dueño;
+    gatito.save((err,productoGuardado)=>{
+        if(err){
+            res.status(500);
+            res.send('Ella no te ama');
+        }
+        res.status(200);
+        res.json(productoGuardado);
+    });
+    
 });
 
 router.get('/api/kittens',(req,res)=>{
