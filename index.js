@@ -10,7 +10,7 @@ const PORT = 3000 || process.env.PORT;
 var kittySchema = mongoose.Schema({
     name: String
 });
-
+// Sera 
 kittySchema.methods.speak = function () {
     var greeting = this.name
       ? "Meow name is " + this.name
